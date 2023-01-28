@@ -13,6 +13,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import CardMedia from '@mui/material/CardMedia';
+import TextField from '@mui/material/TextField';
 // components
 // import Iconify from '../components/iconify';
 // sections
@@ -31,6 +32,8 @@ export default function DashboardAppPage() {
   const [file, setFile] = useState();
 
   const [home_data, setHomeData] = useState({});
+
+  const [payload, setPayload] = useState({});
 
   useEffect( () => {
     userData()
@@ -74,6 +77,31 @@ export default function DashboardAppPage() {
     time = new Date().toLocaleTimeString();
     setTime(time);
   }
+
+  let changeMsg = (event) => {
+    const {name, value} = event.target;
+
+        setPayload( (preValue) => {
+            return {
+                ...preValue,
+                [name] : value,
+            };
+        })
+}
+
+let onSend = async() => {
+  let jwt_token = JSON.parse(localStorage.getItem('jwt_token'));
+  
+  let result  = await axios.post(`${base_url}admin/sendnotification`, payload, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': 'Bearer ' + jwt_token,
+    }
+  });
+  
+  window.location.reload(false);
+
+}
 
   setInterval(updateTime, 1000);
 
@@ -142,6 +170,61 @@ export default function DashboardAppPage() {
               </CardContent>
               <CardActions>
                 <Button sx={{ m: 2 }} size="medium" variant="contained" onClick={onsubmit}>Upload</Button>
+              </CardActions>
+            </Card>
+          </Grid>
+          <Grid item xs={12} md={6} lg={8}>
+            <Card sx={{ minWidth: 275 }}>
+              <CardContent>
+                <div>
+                  <form>
+                    <Typography variant="h4" sx={{ mb: 5 }}>
+                      Send Notification
+                    </Typography>
+                    <TextField
+                        id="outlined-basic-helper-text"
+                        label="Title"
+                        value={payload.title}
+                        helperText="Enter Title"
+                        name='title'
+                        onChange={changeMsg}
+                    />
+                    &nbsp;&nbsp;&nbsp;
+                    <TextField
+                        id="outlined-basic-helper-text"
+                        label="Message"
+                        value={payload.msg}
+                        helperText="Enter Message"
+                        name='msg'
+                        onChange={changeMsg}
+                    />
+                    <br />
+                    <br />
+                    <TextField
+                        fullWidth 
+                        id="fullWidth"
+                        label="Image"
+                        value={payload.img_url}
+                        helperText="Enter Image Url"
+                        name='img_url'
+                        onChange={changeMsg}
+                    />
+                    <br />
+                    <br />
+                    <TextField
+                        fullWidth 
+                        id="fullWidth"
+                        label="Fcm Token"
+                        value={payload.fcm_token}
+                        helperText="Enter Fcm Token"
+                        name='fcm_token'
+                        onChange={changeMsg}
+                    />
+                  </form>
+                </div>
+              </CardContent>
+              <CardActions>
+                <Button sx={{ m: 2 }} size="medium" variant="contained" onClick={onSend}>Send</Button>
               </CardActions>
             </Card>
           </Grid>
