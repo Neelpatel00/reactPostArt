@@ -41,12 +41,13 @@ export default function Form(props) {
         id: props.id ? props.id : "",
         image_url: props.avatarUrl ? props.avatarUrl.replace("https://gitlab.com/ayurvedchikitsamd/post_art_one/-/raw/main/","") : "",
         fst_name: props.name ? props.name : "",
-        image_visibility: props.image_visibility ? props.image_visibility : "",
+        image_visibility: props.image_visibility ? props.image_visibility : "0",
         year: props.year ? props.year : "",
         amount: props.amount ? props.amount : "",
         text_color: props.text_color ? props.text_color : "",
         reso: props.resolution ? props.resolution : "",
         frames: props.default_frames ? props.default_frames : "",
+        isBackground: props.isBackground ? props.isBackground : "0",
         cat_id: props.cat_id ? props.cat_id : "",
         subcat_id: props.subcat_id ? props.subcat_id : "",
         image_date: props.image_date ? props.image_date : "",
@@ -228,6 +229,19 @@ export default function Form(props) {
                         name='year'
                         onChange={handleChange}
                     />
+                    <FormControl sx={{ m: 1, minWidth: 160 }}>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={img_obj.isBackground}
+                            onChange={handleChange}
+                            name='isBackground'
+                        >
+                            <MenuItem value={1}>True</MenuItem>
+                            <MenuItem value={0}>False</MenuItem>
+                        </Select>
+                        <FormHelperText>Background</FormHelperText>
+                    </FormControl>
                     <FormControl sx={{ m: 1, minWidth: 160 }}>
                         <Select
                             labelId="demo-simple-select-label"

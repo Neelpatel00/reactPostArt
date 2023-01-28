@@ -23,6 +23,7 @@ const getData = async() => {
     text_color:doc.text_color,
     resolution:doc.resolution,
     default_frames:doc.default_frames,
+    isBackground:doc.isBackground,
     cat_id:doc.cat_id,
     subcat_id:doc.subcat_id,
     image_date:doc.image_date,

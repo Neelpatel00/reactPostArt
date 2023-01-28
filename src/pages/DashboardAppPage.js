@@ -39,6 +39,7 @@ export default function DashboardAppPage() {
   // eslint-disable-next-line camelcase
   let today_date = new Date().toDateString()
   let time = new Date().toLocaleTimeString();
+  const options = { weekday: "long", year: "numeric", month: "short", day: "numeric", hour: '2-digit', minute:'2-digit'};
 
   let handleChange = (event) => {
       setFile(event.target.files[0]);
@@ -121,7 +122,7 @@ export default function DashboardAppPage() {
                   {home_data.last_user ? home_data.last_user.full_name : ""}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                  {home_data.last_user ? new Date(home_data.last_user.updatedAt).toDateString() : ""}
+                  {home_data.last_user ? new Date(home_data.last_user.updatedAt).toLocaleDateString("en-US", options) : ""}
                   </Typography>
                 </CardContent>
               </CardActionArea>

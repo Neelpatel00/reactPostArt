@@ -334,6 +334,7 @@ export default function UserPage() {
               text_color={img_obj.text_color}
               resolution={img_obj.resolution}
               default_frames={img_obj.default_frames}
+              isBackground={img_obj.isBackground}
               cat_id={img_obj.cat_id}
               subcat_id={img_obj.subcat_id}
               image_date={img_obj.image_date}
