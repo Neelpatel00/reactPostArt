@@ -14,6 +14,10 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import CardMedia from '@mui/material/CardMedia';
 import TextField from '@mui/material/TextField';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import FormHelperText from '@mui/material/FormHelperText';
 // components
 // import Iconify from '../components/iconify';
 // sections
@@ -35,6 +39,18 @@ export default function DashboardAppPage() {
 
   const [payload, setPayload] = useState({});
 
+  const [show1, setShow] = useState("hidden");
+
+  const [show2, setShow2] = useState("hidden");
+
+  const [sub_cat, setSubCat] = useState([]);
+
+  const [v1, setV1] = useState("2");
+
+  const [v2, setV2] = useState("2");
+
+  const [v3, setV3] = useState("2");
+
   useEffect( () => {
     userData()
   },[])
@@ -46,6 +62,38 @@ export default function DashboardAppPage() {
 
   let handleChange = (event) => {
       setFile(event.target.files[0]);
+  }
+
+  let showHide = async (event) => {
+    changeMsg(event);
+    let jwt_token = JSON.parse(localStorage.getItem('jwt_token'));
+    setV2(event.target.value)
+    if (event.target.value === 1) {
+      setV1(event.target.value)
+      setShow("visible");
+      setShow2("hidden");
+      const result = await axios.get(`${base_url}admin/react_subcat/`, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Authorization': 'Bearer ' + jwt_token,
+        }
+      });
+  
+      setSubCat(result.data.cat);
+    }
+    if (event.target.value === 3) {
+      setV3(event.target.value)
+      setShow2("visible")
+      setShow("hidden");
+
+    }
+
+    if(event.target.value === 2 || event.target.value === 4){
+      setShow2("hidden")
+      setShow("hidden");
+    }
+
+    
   }
 
   let onsubmit = async() => {
@@ -211,6 +259,41 @@ let onSend = async() => {
                     />
                     <br />
                     <br />
+                    <FormControl sx={{ m: 1, minWidth: 160 }}>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={v2}
+                            onChange={showHide}
+                            name='type'
+                        >
+                            <MenuItem value={1}>1</MenuItem>
+                            <MenuItem value={2}>2</MenuItem>
+                            <MenuItem value={3}>3</MenuItem>
+                            <MenuItem value={4}>4</MenuItem>
+                        </Select>
+                        <FormHelperText>Type</FormHelperText>
+                    </FormControl>
+                    <FormControl sx={{ m: 1, minWidth: 160, visibility:show1 }}>
+                        <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={payload.subcat_id}
+                            onChange={showHide}
+                            name='subcat_id'
+                        >
+                            {
+                                sub_cat.map((doc) => {
+                                    return (
+                                        <MenuItem key={doc._id} value={doc._id}>{doc.cat_name}</MenuItem>
+                                    );
+                                })
+                            }
+                        </Select>
+                        <FormHelperText>Sub Category</FormHelperText>
+                    </FormControl>
+                    <br />
+                    <br />
                     <TextField
                         fullWidth 
                         id="fullWidth"
@@ -218,6 +301,17 @@ let onSend = async() => {
                         value={payload.fcm_token}
                         helperText="Enter Fcm Token"
                         name='fcm_token'
+                        onChange={changeMsg}
+                    />
+                    <br />
+                    <br />
+                    <TextField sx={{ m: 1, minWidth: 160, visibility:show2 }}
+                        fullWidth 
+                        id="fullWidth"
+                        label="Category"
+                        value={payload.cat_id}
+                        helperText="Enter Category"
+                        name='cat_id'
                         onChange={changeMsg}
                     />
                   </form>
